@@ -1,28 +1,40 @@
 pragma solidity ^0.5.0;
 
-contract IRhizoToken {
-    function balanceOf(address account) public view returns (uint256) {}
-    function transfer(address recipient, uint256 amount) public returns (bool) {}
-    function _transfer(address sender, address recipient, uint256 amount) internal {}
-    function mint(address account, uint256 amount) public payable {}
-}
-
-contract RhizoToken is IRhizoToken {
-    string public name;
-    string public symbol;
-    uint8 public decimals;
-    uint256 private totalSupply;
+contract RhizoToken {
 
     mapping (address => uint256) private _balances;
 
-    uint256 tokenPerEther = 1000;
+    mapping (address => mapping (address => uint256)) private _allowances;
+
+    string private _name;
+    string private _symbol;
+    uint8 private _decimals;
+    uint256 private _totalSupply;
+    
+    uint256 tokenPerEther = 100000;
 
     event Transfer(address indexed from, address indexed to, uint256 value);
 
-    constructor (string memory _name, string memory _symbol, uint8 _decimals) public {
-        name = _name;
-        symbol = _symbol;
-        decimals = _decimals;
+    constructor (string memory name, string memory symbol, uint8 decimals) public {
+        _name = name;
+        _symbol = symbol;
+        _decimals = decimals;
+    }
+
+    function name() public view returns (string memory) {
+        return _name;
+    }
+
+    function symbol() public view returns (string memory) {
+        return _symbol;
+    }
+
+    function decimals() public view returns (uint8) {
+        return _decimals;
+    }
+
+    function totalSupply() public view returns (uint256) {
+        return _totalSupply;
     }
 
     function balanceOf(address account) public view returns (uint256) {
@@ -37,23 +49,14 @@ contract RhizoToken is IRhizoToken {
         emit Transfer(msg.sender, recipient, amount);
     }
 
-    function mint(address account, uint256 amount) public payable {
-        require(account != address(0), "mint to the zero address");
+    function buyToken() public payable {
         require(msg.value != 0, "invalid amount of invest!");
+        
+        uint256 tokens = (msg.value * tokenPerEther) / 1 ether;
 
-        uint256 tokens = (msg.value * 1000) / 1 ether;
-
-        totalSupply = totalSupply + tokens;
-        _balances[account] = _balances[account] + tokens;
-        emit Transfer(address(0), account, amount);
-    }
-
-    function setTokenPrice(uint256 _tokenPerEther) public {
-        tokenPerEther = _tokenPerEther;
-    }
-
-    function getTokenPrice() public view returns (uint256) {
-        return tokenPerEther;
+        _totalSupply = _totalSupply + tokens;
+        _balances[msg.sender] = _balances[msg.sender] + tokens;
+        emit Transfer(address(0), msg.sender, tokens);
     }
 
 }
