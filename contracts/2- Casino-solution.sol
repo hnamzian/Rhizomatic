@@ -24,6 +24,12 @@ contract Casino is Whitelist {
     // hint: use whitelist contract
     Profile public winner;
 
+    address payable owner;
+
+    constructor() public {
+        owner = msg.sender;
+    }
+
     // 27A- Define modifier "onlyOwner"
     // 27C- Go ahead to "startBet" function and make it to be called only by "owner"
     modifier onlyOwner() {
