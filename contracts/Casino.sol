@@ -2,21 +2,8 @@ pragma solidity ^0.5.0;
 
 import "./Whitelist.sol";
 
-contract ICasino {
-    address payable owner;
-
-    constructor() internal {
-        owner = msg.sender;
-    }
-
-    function startBet(uint256 _minBet) public {}
-    function bet(uint256 _rn) public payable {}
-    function endBet(uint256 _rn) public {}
-    function getWinner() public returns (uint256) {}
-}
-
-contract Casino is ICasino, Whitelist {
-    enum status {INACTIVE, STARTED, RUNNING, ENDED}
+contract Casino is Whitelist {
+    enum status {INACTIVE, RUNNING, ENDED}
     status betStatus;
 
     uint256 minBet;
@@ -39,7 +26,7 @@ contract Casino is ICasino, Whitelist {
 
     function startBet(uint256 _minBet) public onlyOwner {
         require(betStatus == status.INACTIVE, "");
-        betStatus = status.STARTED;
+        betStatus = status.RUNNING;
         minBet = _minBet;
     }
 
