@@ -8,7 +8,7 @@ contract Casino is Whitelist {
     // 4A- Define an Enum named "status" with possible values of:
     // INACTIVE, STARTED, RUNNING, ENDED
     // 4B- Define a state variable "betStatus" of type status Enum
-    enum status {INACTIVE, STARTED, RUNNING, ENDED}
+    enum status {INACTIVE, RUNNING, ENDED}
     status betStatus;
 
     // 5- Define a state variable "minBet" of type 256-bit unsigned integer
@@ -43,7 +43,7 @@ contract Casino is Whitelist {
         // 7A- Require "betStatus" is exactle INACTIVE
         require(betStatus == status.INACTIVE, "");
         // 7B- set "betStatus" to STARTED
-        betStatus = status.STARTED;
+        betStatus = status.RUNNING;
         // 7C- set "minBet" to input argument "_minBet"
         minBet = _minBet;
     }
