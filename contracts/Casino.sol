@@ -43,6 +43,8 @@ contract Casino is Whitelist {
         require(betStatus == status.RUNNING, "You can stop ruuning bet only!");
         lastHash = keccak256(abi.encodePacked(_rn, lastHash));
         _setWinner();
+        address payable winnerWallet = address(uint160(address(userAddress[winnerId])));
+        winnerWallet.transfer(totalBet);
         betStatus = status.ENDED;
     }
 
