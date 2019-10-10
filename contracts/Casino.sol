@@ -12,6 +12,7 @@ contract Casino is Whitelist {
 
     uint256 public winnerId;
     Profile public winner;
+    uint256 public totalBet;
 
     address payable owner;
 
@@ -32,6 +33,7 @@ contract Casino is Whitelist {
 
     function bet(uint256 _rn) public payable onlyWhtielisted {
         owner.transfer(msg.value);
+        totalBet = totalBet + msg.value;
         lastHash = keccak256(abi.encodePacked(_rn, lastHash));
         _setWinner();
     }
