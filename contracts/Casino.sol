@@ -37,7 +37,7 @@ contract Casino is Whitelist {
     }
 
     function endBet(uint256 _rn) public onlyOwner {
-        require(betStatus == status.RUNNING, "");
+        require(betStatus == status.RUNNING, "You can stop ruuning bet only!");
         lastHash = keccak256(abi.encodePacked(_rn, lastHash));
         betStatus = status.ENDED;
     }
