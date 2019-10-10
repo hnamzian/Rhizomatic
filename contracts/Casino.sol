@@ -6,7 +6,7 @@ contract Casino is Whitelist {
     enum status {INACTIVE, RUNNING, ENDED}
     status betStatus;
 
-    uint256 minBet;
+    uint256 public minBet;
 
     bytes32 lastHash;
 
@@ -32,6 +32,7 @@ contract Casino is Whitelist {
     }
 
     function bet(uint256 _rn) public payable onlyWhtielisted {
+        require(msg.value >= minBet, "You can bet more than minBet");
         owner.transfer(msg.value);
         totalBet = totalBet + msg.value;
         lastHash = keccak256(abi.encodePacked(_rn, lastHash));
